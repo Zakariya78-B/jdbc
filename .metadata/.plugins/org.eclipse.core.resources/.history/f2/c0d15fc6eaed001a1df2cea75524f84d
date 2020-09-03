@@ -1,0 +1,17 @@
+package com.mycompagny.tennis.core;
+
+
+
+
+
+import com.mycompagny.tennis.core.dao.JoueurRepositoryImpl;
+import com.mycompagny.tennis.core.entity.Joueur;
+
+public class TestDeConnection {
+    public static void main(String... args){
+    	
+    	JoueurRepositoryImpl joueurRepository=new JoueurRepositoryImpl();
+    	Joueur bartoli=joueurRepository.getById(21);
+    	System.out.println(bartoli.getPrenom()+' '+bartoli.getNom());
+    }
+}

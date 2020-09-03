@@ -1,0 +1,22 @@
+package com.mycompagny.tennis.core;
+
+
+
+
+
+import com.mycompagny.tennis.core.dao.JoueurRepositoryImpl;
+import com.mycompagny.tennis.core.entity.Joueur;
+
+public class TestDeConnection {
+    public static void main(String... args){
+    	
+    	JoueurRepositoryImpl joueurRepository=new JoueurRepositoryImpl();
+    	Joueur noah= new Joueur();
+    	noah.setNom("Noah");
+    	noah.setPrenom("Yannik");
+    	noah.setSexe('H');
+    	
+    	joueurRepository.create(noah);
+    	
+    }
+}

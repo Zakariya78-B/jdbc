@@ -1,0 +1,5 @@
+package com.mycompagny.tennis.core.entity;
+
+public class Joueur {
+
+}
