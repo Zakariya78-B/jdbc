@@ -1,0 +1,61 @@
+package com.mycompagny.tennis.core.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.sql.DataSource;
+
+import com.mycompagny.tennis.core.DataSourceProvider;
+import com.mycompagny.tennis.core.entity.Joueur;
+import com.mycompagny.tennis.core.entity.Tournoi;
+
+public class TournoiRepositoryImpl {
+	public void create(Tournoi tournoi) {
+        Connection conn = null;
+        try {
+        	DataSource dataSource=DataSourceProvider.getSingleDataSourceInstance();
+        	
+        	conn=dataSource.getConnection();
+        	
+        	
+        	
+        	PreparedStatement ps = conn.prepareStatement("INSERT INTO TOURNOI (NOM,CODE)VALUES(?,?,?)",Statement.RETURN_GENERATED_KEYS);
+      
+        	ps.setString(1, tournoi.getNom());
+        	ps.setString(2, tournoi.getCode());
+
+        	
+        	ps.executeUpdate();
+        	
+        	ResultSet rs =ps.getGeneratedKeys();  
+        	
+        	if(rs.next()) {
+        		tournoi.setId(rs.getInt(1));
+        	}
+            
+            System.out.println("Joueur créé");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                if (conn!=null) conn.rollback(); 
+                    
+                }catch (SQLException el) {
+    	            el.printStackTrace();
+        }
+       }
+        finally {
+        	try {
+        		if(conn!=null) {
+        			conn.close();
+        		}
+        	
+            
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+ }
+}

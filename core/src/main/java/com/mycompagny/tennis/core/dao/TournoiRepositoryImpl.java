@@ -1,0 +1,251 @@
+package com.mycompagny.tennis.core.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import com.mycompagny.tennis.core.DataSourceProvider;
+import com.mycompagny.tennis.core.entity.Tournoi;
+
+public class TournoiRepositoryImpl {
+	public void create(Tournoi tournoi) {
+        Connection conn = null;
+        try {
+        	DataSource dataSource=DataSourceProvider.getSingleDataSourceInstance();
+        	
+        	conn=dataSource.getConnection();
+        	
+        	
+        	
+        	PreparedStatement ps = conn.prepareStatement("INSERT INTO TOURNOI (NOM,CODE)VALUES(?,?,?)",Statement.RETURN_GENERATED_KEYS);
+      
+        	ps.setString(1, tournoi.getNom());
+        	ps.setString(2, tournoi.getCode());
+
+        	
+        	ps.executeUpdate();
+        	
+        	ResultSet rs =ps.getGeneratedKeys();  
+        	
+        	if(rs.next()) {
+        		tournoi.setId(rs.getInt(1));
+        	}
+            
+            System.out.println("Tournoi créé");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                if (conn!=null) conn.rollback(); 
+                    
+                }catch (SQLException el) {
+    	            el.printStackTrace();
+        }
+       }
+        finally {
+        	try {
+        		if(conn!=null) {
+        			conn.close();
+        		}
+        	
+            
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+ }
+	public void update(Tournoi tournoi) {
+        Connection conn = null;
+        try {
+        	DataSource dataSource=DataSourceProvider.getSingleDataSourceInstance();
+        	
+        	conn=dataSource.getConnection();
+        	
+        	
+        	
+        	PreparedStatement ps = conn.prepareStatement("UPDATE TOURNOI SET NOM=?,CODE=? WHERE ID=?");
+      
+        	ps.setString(1, tournoi.getNom());
+        	ps.setString(2, tournoi.getCode());
+        	ps.setInt(3, tournoi.getId());
+        	
+        	ps.executeUpdate();
+        	
+        	
+               
+            
+            System.out.println("Tournoi modifié");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                if (conn!=null) conn.rollback(); 
+                    
+                }catch (SQLException el) {
+    	            el.printStackTrace();
+        }
+       }
+        finally {
+        	try {
+        		if(conn!=null) {
+        			conn.close();
+        		}
+        	
+            
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+ }
+	public void delete(Integer id) {
+        Connection conn = null;
+        try {
+        	DataSource dataSource=DataSourceProvider.getSingleDataSourceInstance();
+        	
+        	conn=dataSource.getConnection();
+        	
+        	
+        	
+        	PreparedStatement ps = conn.prepareStatement("DELETE FROM TOURNOI WHERE ID=?");
+      
+        
+        	ps.setInt(1, id);
+        	
+        	ps.executeUpdate();
+        	
+        	
+               
+            
+            System.out.println("Tournoi supprimé");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                if (conn!=null) conn.rollback(); 
+                    
+                }catch (SQLException el) {
+    	            el.printStackTrace();
+        }
+       }
+        finally {
+        	try {
+        		if(conn!=null) {
+        			conn.close();
+        		}
+        	
+            
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+ }
+	public Tournoi getById(Integer id){
+	 	
+        Connection conn = null;
+        Tournoi tournoi =null;
+        try {
+        	DataSource dataSource=DataSourceProvider.getSingleDataSourceInstance();
+        	conn=dataSource.getConnection();
+        	
+        	
+        	
+        	PreparedStatement ps = conn.prepareStatement("SELECT NOM,CODE FROM TOURNOI WHERE ID=?");
+      
+        
+        	ps.setInt(1, id);
+        	        	
+        	ResultSet rs = ps.executeQuery();
+        	
+        	if(rs.next()) {
+        		tournoi = new Tournoi();
+        		tournoi.setId(id);
+        		tournoi.setNom(rs.getString("NOM"));
+        		tournoi.setCode(rs.getString("CODE"));
+        		   		
+        	}
+        	
+        	
+               
+            
+            System.out.println("Tournoi lu");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                if (conn!=null) conn.rollback(); 
+                    
+                }catch (SQLException el) {
+    	            el.printStackTrace();
+        }
+       }
+        finally {
+        	try {
+        		if(conn!=null) {
+        			conn.close();
+        		}
+        	
+            
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return tournoi;
+ }
+	public List<Tournoi> list(){
+	 	
+        Connection conn = null;
+        List<Tournoi> tournois =new ArrayList<Tournoi>();
+        try {
+        	DataSource dataSource=DataSourceProvider.getSingleDataSourceInstance();
+        	
+        	conn=dataSource.getConnection();
+        	
+        	
+        	
+        	PreparedStatement ps = conn.prepareStatement("SELECT ID,NOM,CODE FROM TOURNOI");
+      
+        
+        	
+        	        	
+        	ResultSet rs = ps.executeQuery();
+        	
+        	while(rs.next()) {
+        		Tournoi tournoi = new Tournoi();
+        		tournoi.setId(rs.getInt("ID"));
+        		tournoi.setNom(rs.getString("NOM"));
+        		tournoi.setCode(rs.getString("CODE"));
+        		
+        		
+        		tournois.add(tournoi);
+        	}
+        	
+        	
+               
+            
+            System.out.println("Tournois lus");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                if (conn!=null) conn.rollback(); 
+                    
+                }catch (SQLException el) {
+    	            el.printStackTrace();
+        }
+       }
+        finally {
+        	try {
+        		if(conn!=null) {
+        			conn.close();
+        		}
+        	
+            
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return tournois;
+ }
+	
+}
