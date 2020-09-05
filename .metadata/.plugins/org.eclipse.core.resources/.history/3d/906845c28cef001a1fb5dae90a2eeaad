@@ -1,0 +1,29 @@
+package com.mycompagny.tennis.core;
+
+
+
+
+
+import java.util.List;
+
+import com.mycompagny.tennis.core.dao.JoueurRepositoryImpl;
+import com.mycompagny.tennis.core.dao.TournoiRepositoryImpl;
+import com.mycompagny.tennis.core.entity.Joueur;
+import com.mycompagny.tennis.core.entity.Tournoi;
+import com.mycompagny.tennis.core.service.JoueurService;
+
+public class TestDeConnection {
+    public static void main(String... args){
+    	
+    	JoueurService joueurService=new JoueurService();
+   
+    	Joueur zak= new Joueur();
+    	zak.setNom("Bazbaz");
+    	zak.setPrenom("Zak");
+    	zak.setSexe('H');
+    	
+    	joueurService.createJoueur(zak);
+    	System.out.println("l'identifiant du joueur creer est "+zak.getId());
+    	
+    }
+}
